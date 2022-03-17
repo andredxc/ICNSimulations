@@ -13,12 +13,15 @@ import matplotlib.pyplot as plt
 from icnexperiment.topology_generation import Topology
 from icnexperiment.dir_config import c_strLogDir
 
-c_strLogFile = c_strLogDir + 'draw_topology.log'
-
-logging.basicConfig(filename=c_strLogFile, format='%(asctime)s %(message)s', level=logging.INFO)
-logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 def main():
+
+    log_file_path = c_strLogDir + 'draw_topology.log'
+    try:
+        logging.basicConfig(filename=log_file_path, format='%(asctime)s %(message)s', level=logging.INFO)
+        logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+    except Exception as e:
+        print(f"[main] Exception raised while setting up logging: {e}")
 
     # Read input param
     if (len(sys.argv) == 1):
@@ -64,14 +67,14 @@ def main():
 
     # Draw legend
     lstScatters = [humanScatter, sensorScatter, droneScatter, vehicleScatter]
-    lstLabels   = ['Soldado', 'Sensor', 'Drone', 'Veículo']
+    lstLabels   = ['Soldier', 'Sensor', 'Drone', 'Vehicle']
     if (len(lstAccessCoord) > 0):
         lstScatters.append(accessScatter)
-        lstLabels.append('AccessPoint')
+        lstLabels.append('Access Point')
     plt.legend(lstScatters, lstLabels, loc='lower left')
 
-    plt.xlabel('Coordenada X (M)')
-    plt.ylabel('Coordenada Y (M)')
+    plt.xlabel('Coordinate X (m)')
+    plt.ylabel('Coordinate Y (m)')
 
     #################################################
     # Draw links between nodes
@@ -87,7 +90,7 @@ def main():
     logging.info('[main] Topology has links=%d; humans=%d; drones=%d; sensors=%d; vehicles=%d' % (len(pTopology.lstLinks), len(lstHumanCoord), len(lstDroneCoord), len(lstSensorCoord), len(lstVehicleCoord)))
 
     plt.show()
-    logging.info('[main] Done! Log written to %s' % (c_strLogFile))
+    logging.info('[main] Done! Log written to %s' % (log_file_path))
 
 if __name__ == '__main__':
     main()
